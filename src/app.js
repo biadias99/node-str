@@ -3,42 +3,25 @@
 const express = require('express');
 // tudo que coloca sem caminho, ele busca direto na node_modules
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
 const app = express();
 const router = express.Router();
+
+// Conecta ao banco
+mongoose.connect('mongodb://bia:bia123@ds035787.mlab.com:35787/nodestr');
+
+// Models
+const Product = require('./models/product');
+
+// Rotas
+const indexRoutes = require('./routes/index');
+const productRoutes = require('./routes/product');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const route = router.get('/', (req, res, next) =>{
-    res.status(200).send({
-        title: "Node Store API",
-        version: "0.0.1"
-    });
-});
-
-const create = router.post('/', (req, res, next) =>{
-    res.status(201).send(
-        req.body
-    );// to enviando uma resposta
-});
-
-const put = router.put('/:id', (req, res, next) =>{
-    const id = req.params.id;
-    res.status(200).send({
-        id: id, 
-        item: req.body
-    });// to enviando uma resposta
-});
-
-const del = router.delete('/', (req, res, next) =>{
-    res.status(200).send(
-        req.body
-    );// to enviando uma resposta
-});
-
-app.use('/',route);
-app.use('/products',create);
-app.use('/products',put);
-app.use('/products',del);
+app.use('/',indexRoutes);
+app.use('/products',productRoutes);
 
 module.exports = app;
