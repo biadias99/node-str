@@ -2,6 +2,7 @@
 
 const ValidationContract = require('../validators/validator');
 const repository = require('../repositories/customer-repository');
+const md5 = require('md5');
 
 exports.get = async(req, res, next) => {
     try{
@@ -28,7 +29,11 @@ exports.post = async(req, res, next) => {
     }
 
     try{
-        await repository.create(req.body);
+        await repository.create({
+            name: req.body.name,
+            email: req.body.email,
+            password: md5(req.body.password + global.SALT_KEY) // só a senha daria certo mas para ser mais seguro, coloco uma chave
+        });
         res.status(200).send({ message: 'Cliente cadastrado com sucesso!' });  
     }catch (e){
         res.status(500).send({

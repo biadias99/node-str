@@ -4,12 +4,13 @@ const express = require('express');
 // tudo que coloca sem caminho, ele busca direto na node_modules
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const config = require('./config');
 
 const app = express();
 const router = express.Router();
 
 // Conecta ao banco
-mongoose.connect('mongodb://bia:bia123@ds035787.mlab.com:35787/nodestr');
+mongoose.connect(config.connectionString);
 
 // Models
 const Product = require('./models/product');
