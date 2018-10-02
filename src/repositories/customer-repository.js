@@ -12,3 +12,16 @@ exports.get = async() => {
     const res = await Customer.find({});
     return res;
 }
+
+exports.authenticate = async(data) => {
+    const res = await Customer.findOne({
+        email: data.email,
+        password: data.password
+    });
+    return res;
+}
+
+exports.getById = async(id) => {
+    const res = await Customer.findById(id);
+    return res;
+}
